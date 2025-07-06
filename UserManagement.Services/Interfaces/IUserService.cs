@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using UserManagement.Models;
+using System.Threading.Tasks;
 
 namespace UserManagement.Services.Domain.Interfaces;
 
@@ -11,5 +12,7 @@ public interface IUserService
     /// <param name="isActive"></param>
     /// <returns></returns>
     IEnumerable<User> FilterByActive(bool isActive);
-    IEnumerable<User> GetAll();
+  
+
+    Task<List<User>> GetAllAsync(); // IEnumerable<User> GetAll() removed - replace with new async method to retrieve all users
 }
