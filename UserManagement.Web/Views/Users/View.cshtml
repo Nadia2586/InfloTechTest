@@ -1,0 +1,21 @@
+﻿@model UserDetailViewModel
+
+<h2>User Details</h2>
+
+<div class="mb-3">
+    <strong>Forename:</strong> @Model.Forename
+</div>
+<div class="mb-3">
+    <strong>Surname:</strong> @Model.Surname
+</div>
+<div class="mb-3">
+    <strong>Email:</strong> @Model.Email
+</div>
+<div class="mb-3">
+    <strong>Account Active:</strong> @(Model.IsActive ? "Yes" : "No")
+</div>
+<div class="mb-3">
+    <strong>Date of Birth:</strong> @(Model.DateOfBirth?.ToString("dd MMM yyyy") ?? "N/A")
+</div>
+
+<a asp-action="List" class="btn btn-secondary">Back to List</a>
