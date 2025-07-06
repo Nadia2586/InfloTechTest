@@ -3,6 +3,7 @@
 public class UserListViewModel
 {
     public List<UserListItemViewModel> Items { get; set; } = new();
+    public string CurrentFilter { get; set; } = "all"; // Added to allow filter buttons to work properly
 }
 
 public class UserListItemViewModel

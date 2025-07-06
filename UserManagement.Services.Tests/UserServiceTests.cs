@@ -14,7 +14,7 @@ public class UserServiceTests
         var users = SetupUsers();
 
         // Act: Invokes the method under test with the arranged parameters.
-        var result = service.GetAll();
+        var result = service.GetAllAsync();
 
         // Assert: Verifies that the action of the method under test behaves as expected.
         result.Should().BeSameAs(users);
