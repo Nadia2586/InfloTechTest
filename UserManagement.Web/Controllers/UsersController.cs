@@ -71,6 +71,7 @@ public class UsersController : Controller
 
         _userService.Create(user); // or _dataContext.Create(user) depending on your structure
 
+        TempData["SuccessMessage"] = "User added successfully.";
         return RedirectToAction("List");
     }
 
@@ -93,6 +94,7 @@ public class UsersController : Controller
             DateOfBirth = user.DateOfBirth
         };
 
+        TempData["SuccessMessage"] = $"Viewed user {user.Forename} {user.Surname}";
         return View(model);
     }
 
@@ -138,6 +140,7 @@ public class UsersController : Controller
 
         _userService.Update(updatedUser);
 
+        TempData["SuccessMessage"] = $"User {model.Forename} {model.Surname} updated successfully.";
         return RedirectToAction("List");
     }
 
