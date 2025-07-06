@@ -1,45 +1,47 @@
-using System.Linq;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using UserManagement.Models;
+
 using UserManagement.Services.Domain.Implementations;
 
-namespace UserManagement.Data.Tests;
-
-public class UserServiceTests
+namespace UserManagement.Data.Tests
 {
-    [Fact]
-    public void GetAll_WhenContextReturnsEntities_MustReturnSameEntities()
+    public class UserServiceTests
     {
-        // Arrange: Initializes objects and sets the value of the data that is passed to the method under test.
-        var service = CreateService();
-        var users = SetupUsers();
+        [Fact]
+        public async Task GetAll_WhenContextReturnsEntities_MustReturnSameEntities()
+        {
+            // Arrange
+            var options = new DbContextOptionsBuilder<DataContext>()
+                .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
+                .Options;
 
-        // Act: Invokes the method under test with the arranged parameters.
-        var result = service.GetAllAsync();
+            using var context = new DataContext(options);
+            context.Users!.AddRange(SetupUsers());
+            context.SaveChanges();
 
-        // Assert: Verifies that the action of the method under test behaves as expected.
-        result.Should().BeSameAs(users);
-    }
+            var service = new UserService(context);
 
-    private IQueryable<User> SetupUsers(string forename = "Johnny", string surname = "User", string email = "juser@example.com", bool isActive = true)
-    {
-        var users = new[]
+            // Act
+            var result = await service.GetAllAsync();
+
+            // Assert
+            result.Should().BeEquivalentTo(SetupUsers());
+        }
+
+        private List<User> SetupUsers() => new()
         {
             new User
             {
-                Forename = forename,
-                Surname = surname,
-                Email = email,
-                IsActive = isActive
+                Id = 1,
+                Forename = "Johnny",
+                Surname = "User",
+                Email = "juser@example.com",
+                IsActive = true,
+                DateOfBirth = new DateTime(1990, 1, 1)
             }
-        }.AsQueryable();
-
-        _dataContext
-            .Setup(s => s.GetAll<User>())
-            .Returns(users);
-
-        return users;
+        };
     }
-
-    private readonly Mock<IDataContext> _dataContext = new();
-    private UserService CreateService() => new(_dataContext.Object);
 }
