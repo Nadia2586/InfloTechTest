@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using UserManagement.Services.Domain.Interfaces;
 using UserManagement.WebMS.Controllers;
 using System.Linq;
+using System;
 
 
 namespace UserManagement.Web.Tests;
@@ -35,6 +36,7 @@ public class UserControllerTests
                 Id = u.Id,
                 Forename = u.Forename,
                 Surname = u.Surname,
+                DateOfBirth = u.DateOfBirth,
                 Email = u.Email,
                 IsActive = u.IsActive
             })
@@ -50,6 +52,7 @@ public class UserControllerTests
                 Id = 1,
                 Forename = forename,
                 Surname = surname,
+                DateOfBirth = new DateTime(1990, 5, 1),
                 Email = email,
                 IsActive = isActive
             }
