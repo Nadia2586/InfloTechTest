@@ -1,46 +1,59 @@
+using Microsoft.AspNetCore.Mvc;
 using UserManagement.Models;
-using UserManagement.Services.Domain.Interfaces;
 using UserManagement.Web.Models.Users;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using UserManagement.Services.Domain.Interfaces;
 using UserManagement.WebMS.Controllers;
+using System.Linq;
 
-namespace UserManagement.Data.Tests;
+
+namespace UserManagement.Web.Tests;
 
 public class UserControllerTests
 {
     [Fact]
-    public void List_WhenServiceReturnsUsers_ModelMustContainUsers()
+    public async Task List_WhenServiceReturnsUsers_ModelMustContainUsers()
     {
-        // Arrange: Initializes objects and sets the value of the data that is passed to the method under test.
+        // Arrange
+        var users = SetupUsers(); // this now returns a List<User>
+        _userService
+            .Setup(s => s.GetAllAsync())
+            .ReturnsAsync(users); // properly mocked async return
+
         var controller = CreateController();
-        var users = SetupUsers();
 
-        // Act: Invokes the method under test with the arranged parameters.
-        var result = controller.List();
+        // Act
+        var result = await controller.List();
+        var model = (result as ViewResult)?.Model as UserListViewModel;
 
-        // Assert: Verifies that the action of the method under test behaves as expected.
-        result.Model
-            .Should().BeOfType<UserListViewModel>()
-            .Which.Items.Should().BeEquivalentTo(users);
+        // Assert
+        model.Should().BeOfType<UserListViewModel>();
+        model.Items.Should().BeEquivalentTo(
+            users.Select(u => new UserListItemViewModel
+            {
+                Id = u.Id,
+                Forename = u.Forename,
+                Surname = u.Surname,
+                Email = u.Email,
+                IsActive = u.IsActive
+            })
+        );
     }
 
-    private User[] SetupUsers(string forename = "Johnny", string surname = "User", string email = "juser@example.com", bool isActive = true)
+    private List<User> SetupUsers(string forename = "Johnny", string surname = "User", string email = "juser@example.com", bool isActive = true)
     {
-        var users = new[]
+        return new List<User>
         {
             new User
             {
+                Id = 1,
                 Forename = forename,
                 Surname = surname,
                 Email = email,
                 IsActive = isActive
             }
         };
-
-        _userService
-            .Setup(s => s.GetAll())
-            .Returns(users);
-
-        return users;
     }
 
     private readonly Mock<IUserService> _userService = new();

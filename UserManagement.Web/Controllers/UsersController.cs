@@ -12,11 +12,18 @@ public class UsersController : Controller
     public UsersController(IUserService userService) => _userService = userService;
 
     [HttpGet]
-    public async Task<ViewResult> List()
+    public async Task<ViewResult> List(string filter = "all") // Updated to allow the filter buttons to work properly
     {
         var users = await _userService.GetAllAsync();
 
-        var items = users.Select(p => new UserListItemViewModel
+        var filtered = filter.ToLower() switch
+        {
+            "active" => users.Where(u => u.IsActive),
+            "inactive" => users.Where(u => !u.IsActive),
+            _ => users
+        };
+
+        var items = filtered.Select(p => new UserListItemViewModel
         {
             Id = p.Id,
             Forename = p.Forename,
@@ -25,7 +32,12 @@ public class UsersController : Controller
             IsActive = p.IsActive
         });
 
-        var model = new UserListViewModel { Items = items.ToList() };
+        var model = new UserListViewModel
+        {
+            Items = items.ToList(),
+            CurrentFilter = filter.ToLower()
+        };
+
         return View(model);
     }
 }
