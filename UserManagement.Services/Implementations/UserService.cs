@@ -12,6 +12,7 @@ namespace UserManagement.Services.Domain.Implementations;
 public class UserService : IUserService
 {
     private readonly IDataContext _dataAccess;
+
     public UserService(IDataContext dataAccess) => _dataAccess = dataAccess;
 
     /// <summary>
@@ -35,20 +36,51 @@ public class UserService : IUserService
     public void Create(User user)
     {
         _dataAccess.Create(user);
+        _dataAccess.Log(new LogEntry
+        {
+            UserId = user.Id,
+            Action = "Create",
+            Description = $"User {user.Forename} {user.Surname} was created.",
+            Timestamp = DateTime.UtcNow
+        });
     }
+
+    public void LogAction(LogEntry entry)
+    {
+        _dataAccess.Log(entry);
+    }
+
 
     public void Update(User user)
     {
         _dataAccess.Update(user);
+
+        _dataAccess.Log(new LogEntry
+        {
+            UserId = user.Id,
+            Action = "Edit",
+            Description = $"User {user.Forename} {user.Surname} was updated.",
+            Timestamp = DateTime.UtcNow
+        });
+
     }
 
     public void Delete(long id)
     {
         var user = _dataAccess.GetAll<User>().FirstOrDefault(u => u.Id == id);
-        if (user is not null)
+        if (user != null)
         {
             _dataAccess.Delete(user);
+
+            _dataAccess.Log(new LogEntry
+            {
+                UserId = user.Id, 
+                Action = "Delete",
+                Description = $"User {user.Forename} {user.Surname} was deleted.",
+                Timestamp = DateTime.UtcNow
+            });
         }
+
     }
 
     public void DeleteConfirm(long id)
@@ -58,6 +90,21 @@ public class UserService : IUserService
         {
             _dataAccess.Delete(user);
         }
+    }
+
+    public async Task<List<LogEntry>> GetLogsByUserIdAsync(long userId)
+    {
+        return await _dataAccess
+            .GetAll<LogEntry>()
+            .Where(log => log.UserId == userId)
+            .OrderByDescending(log => log.Timestamp)
+            .ToListAsync();
+    }
+
+    public IQueryable<LogEntry> GetAllLogs()
+    {
+        return _dataAccess.GetAll<LogEntry>()
+                     .Include(l => l.User);
     }
 
 

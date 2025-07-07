@@ -1,4 +1,6 @@
 ﻿using System;
+using UserManagement.Models;
+
 
 public class UserDetailViewModel
 {
@@ -8,4 +10,7 @@ public class UserDetailViewModel
     public string? Email { get; set; }
     public bool IsActive { get; set; }
     public DateTime? DateOfBirth { get; set; }
+
+    public List<LogEntry> Logs { get; set; } = new();
+
 }

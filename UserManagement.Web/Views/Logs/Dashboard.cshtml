@@ -1,0 +1,75 @@
+﻿@model UserManagement.Web.Models.Logs.LogDashboardViewModel
+
+<h2>Log Summary</h2>
+
+<br />
+
+<ul class="list-group">
+    <li class="list-group-item d-flex justify-content-between align-items-center">
+        Total Logs
+        <span class="badge bg-primary rounded-pill">@Model.TotalLogs</span>
+    </li>
+    <li class="list-group-item d-flex justify-content-between align-items-center">
+        Created Users
+        <span class="badge bg-success rounded-pill">@Model.CreateCount</span>
+    </li>
+    <li class="list-group-item d-flex justify-content-between align-items-center">
+        Edited Users
+        <span class="badge bg-warning rounded-pill">@Model.EditCount</span>
+    </li>
+    <li class="list-group-item d-flex justify-content-between align-items-center">
+        Deleted Users
+        <span class="badge bg-danger rounded-pill">@Model.DeleteCount</span>
+    </li>
+    <li class="list-group-item d-flex justify-content-between align-items-center">
+        Viewed Users
+        <span class="badge bg-info rounded-pill">@Model.ViewCount</span>
+    </li>
+</ul>
+
+<br />
+
+<div class="mt-5">
+    <h4>Action Summary Chart</h4>
+    <canvas id="logChart" height="100"></canvas>
+</div>
+
+
+
+
+<br />
+
+<a class="btn btn-secondary mb-3" asp-controller="Logs" asp-action="LogFull">← Back to Full Log</a>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+    const ctx = document.getElementById('logChart').getContext('2d');
+    const logChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: ['Created', 'Edited', 'Deleted', 'Viewed'],
+            datasets: [{
+                label: 'User Actions',
+                data: [@Model.CreateCount, @Model.EditCount, @Model.DeleteCount, @Model.ViewCount],
+                backgroundColor: ['#28a745', '#ffc107', '#dc3545', '#0dcaf0']
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: { display: false },
+                title: {
+                    display: true,
+                    text: 'User Activity Breakdown'
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    precision: 0
+                }
+            }
+        }
+    });
+</script>

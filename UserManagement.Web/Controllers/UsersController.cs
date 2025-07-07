@@ -84,6 +84,17 @@ public class UsersController : Controller
             return NotFound();
         }
 
+        // Log the view
+        _userService.LogAction(new LogEntry
+        {
+            UserId = user.Id,
+            Action = "View",
+            Description = $"User {user.Forename} {user.Surname} was viewed.",
+            Timestamp = DateTime.UtcNow
+        });
+
+        var logs = await _userService.GetLogsByUserIdAsync(user.Id);
+
         var model = new UserDetailViewModel
         {
             Id = user.Id,
@@ -91,12 +102,14 @@ public class UsersController : Controller
             Surname = user.Surname,
             Email = user.Email,
             IsActive = user.IsActive,
-            DateOfBirth = user.DateOfBirth
+            DateOfBirth = user.DateOfBirth,
+            Logs = logs
         };
 
         TempData["SuccessMessage"] = $"Viewed user {user.Forename} {user.Surname}";
         return View(model);
     }
+
 
     [HttpGet("edit/{id}")]
     public async Task<IActionResult> Edit(long id)

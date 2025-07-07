@@ -18,4 +18,35 @@
     <strong>Date of Birth:</strong> @(Model.DateOfBirth?.ToString("dd MMM yyyy") ?? "N/A")
 </div>
 
+<h3>Action History</h3>
+
+@if (Model.Logs != null && Model.Logs.Any())
+{
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Timestamp</th>
+                <th>Action</th>
+                <th>Description</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var log in Model.Logs)
+            {
+                <tr>
+                    <td>@log.Timestamp.ToLocalTime().ToString("g")</td>
+                    <td>@log.Action</td>
+                    <td>@log.Description</td>
+                </tr>
+            }
+
+        </tbody>
+    </table>
+}
+else
+{
+    <p><em>No logs recorded for this user yet.</em></p>
+}
+
+
 <a asp-action="List" class="btn btn-secondary">Back to List</a>

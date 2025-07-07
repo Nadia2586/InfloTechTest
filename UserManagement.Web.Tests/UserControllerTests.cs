@@ -81,6 +81,13 @@ public class UserControllerTests
         var mockUserService = new Mock<IUserService>();
         var controller = new UsersController(mockUserService.Object);
 
+        // Inject TempData to prevent NullReference
+        var tempData = new TempDataDictionary(
+            new DefaultHttpContext(),
+            Mock.Of<ITempDataProvider>()
+        );
+        controller.TempData = tempData;
+
         // Act
         var result = controller.Create(model);
 
@@ -96,6 +103,7 @@ public class UserControllerTests
         var redirect = Assert.IsType<RedirectToActionResult>(result);
         redirect.ActionName.Should().Be("List");
     }
+
 
 
     [Fact]
@@ -138,7 +146,15 @@ public class UserControllerTests
 
         var mockService = new Mock<IUserService>();
         mockService.Setup(s => s.GetAllAsync()).ReturnsAsync(users);
+        mockService.Setup(s => s.GetLogsByUserIdAsync(1)).ReturnsAsync(new List<LogEntry>()); 
+
         var controller = new UsersController(mockService.Object);
+
+        // Optional: Fix TempData null issue if you're setting messages
+        controller.TempData = new TempDataDictionary(
+            new DefaultHttpContext(),
+            Mock.Of<ITempDataProvider>()
+        );
 
         // Act
         var result = await controller.View(1);
@@ -150,6 +166,7 @@ public class UserControllerTests
         model.Forename.Should().Be("Test");
         model.Email.Should().Be("test@example.com");
     }
+
 
     [Fact]
     public async Task View_WithInvalidId_ShouldReturnNotFound()
@@ -225,6 +242,13 @@ public class UserControllerTests
         var mockService = new Mock<IUserService>();
         var controller = new UsersController(mockService.Object);
 
+        // Inject TempData
+        var tempData = new TempDataDictionary(
+            new DefaultHttpContext(),
+            Mock.Of<ITempDataProvider>()
+        );
+        controller.TempData = tempData;
+
         // Act
         var result = controller.Edit(1, model);
 
@@ -238,6 +262,7 @@ public class UserControllerTests
         var redirect = Assert.IsType<RedirectToActionResult>(result);
         redirect.ActionName.Should().Be("List");
     }
+
 
     [Fact]
     public void Edit_Post_WithInvalidModel_ShouldReturnView()
