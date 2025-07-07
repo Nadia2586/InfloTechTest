@@ -1,0 +1,19 @@
+﻿@model UserManagement.Web.Models.Logs.LogListItemViewModel
+
+<h2>Log Details</h2>
+
+<dl class="row">
+    <dt class="col-sm-3">Timestamp</dt>
+    <dd class="col-sm-9">@Model.Timestamp.ToLocalTime().ToString("f")</dd>
+
+    <dt class="col-sm-3">Action</dt>
+    <dd class="col-sm-9">@Model.ActionName</dd>
+
+    <dt class="col-sm-3">Description</dt>
+    <dd class="col-sm-9">@Model.Description</dd>
+
+    <dt class="col-sm-3">User</dt>
+    <dd class="col-sm-9">@Model.UserName</dd>
+</dl>
+
+<a class="btn btn-secondary" asp-controller="Logs" asp-action="LogFull">Back to Logs</a>

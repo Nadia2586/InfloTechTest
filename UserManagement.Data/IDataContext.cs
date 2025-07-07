@@ -1,5 +1,11 @@
-﻿using System.Collections.Generic;
+﻿#pragma warning disable IDE0005 // Using directive is unnecessary.
+using System.Collections.Generic;
+#pragma warning restore IDE0005 // Using directive is unnecessary.
 using System.Linq;
+#pragma warning disable IDE0005 // Using directive is unnecessary.
+using Microsoft.Extensions.Logging.Abstractions;
+using UserManagement.Models;
+#pragma warning restore IDE0005 // Using directive is unnecessary.
 
 namespace UserManagement.Data;
 
@@ -29,4 +35,8 @@ public interface IDataContext
     void Update<TEntity>(TEntity entity) where TEntity : class;
 
     void Delete<TEntity>(TEntity entity) where TEntity : class;
+
+    void Log(UserManagement.Models.LogEntry entry);
+    IQueryable<UserManagement.Models.LogEntry> GetAllLogs();
+
 }

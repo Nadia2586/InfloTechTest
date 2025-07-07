@@ -1,0 +1,56 @@
+﻿@model UserManagement.Web.Models.Logs.LogListViewModel
+
+<h2>Application Logs</h2>
+
+<br/>
+<div class="d-flex justify-content-end align-items-center mb-3">
+<a class="btn btn-outline-primary" asp-controller="Logs" asp-action="Dashboard">View Dashboard</a>
+</div>
+<br/>
+
+<form method="get" asp-controller="Logs" asp-action="LogFull" class="mb-3">
+    <div class="input-group">
+        <input type="text" name="searchTerm" value="@Model.SearchTerm" class="form-control" placeholder="Search logs..." />
+        <button type="submit" class="btn btn-primary">Search</button>
+    </div>
+</form>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Timestamp</th>
+            <th>Action</th>
+            <th>Description</th>
+            <th>User</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+    @foreach (var log in Model.Logs)
+    {
+        <tr>
+            <td>@log.Timestamp.ToLocalTime().ToString("g")</td>
+            <td>@log.ActionName</td>
+            <td>@log.Description</td>
+            <td>@log.UserName</td>
+            <td>
+                <a class="btn btn-sm btn-outline-secondary" asp-controller="Logs" asp-action="LogDetails" asp-route-id="@log.Id">View</a>
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>
+
+@if (Model.TotalPages > 1)
+{
+    <nav>
+        <ul class="pagination">
+            @for (int i = 1; i <= Model.TotalPages; i++)
+            {
+                <li class="page-item @(i == Model.CurrentPage ? "active" : "")">
+                    <a class="page-link" asp-controller="Logs" asp-action="LogFull" asp-route-page="@i">@i</a>
+                </li>
+            }
+        </ul>
+    </nav>
+}

@@ -43,5 +43,28 @@ namespace UserManagement.Data.Tests
                 DateOfBirth = new DateTime(1990, 1, 1)
             }
         };
+
+        [Fact]
+        public void Create_ShouldLogCreateAction()
+        {
+            // Arrange
+            var mockContext = new Mock<IDataContext>();
+            var service = new UserService(mockContext.Object);
+
+            var user = new User { Id = 1, Forename = "Alice", Surname = "Smith" };
+
+            // Act
+            service.Create(user);
+
+            // Assert
+            mockContext.Verify(d => d.Create(It.Is<User>(u => u.Id == 1)), Times.Once);
+            mockContext.Verify(d => d.Log(It.Is<LogEntry>(l =>
+                l.UserId == 1 &&
+                l.Action == "Create" &&
+                (l.Description ?? "").Contains("Alice Smith") // null-safe check
+            )), Times.Once);
+        }
+
+
     }
 }

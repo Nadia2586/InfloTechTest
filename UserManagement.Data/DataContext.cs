@@ -1,7 +1,11 @@
 ﻿using System;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
+#pragma warning disable IDE0005 // Using directive is unnecessary.
+using Microsoft.Extensions.Logging.Abstractions;
+#pragma warning restore IDE0005 // Using directive is unnecessary.
 using UserManagement.Models;
+
 
 namespace UserManagement.Data;
 
@@ -31,6 +35,8 @@ public class DataContext : DbContext, IDataContext
         });
 
     public DbSet<User>? Users { get; set; }
+    public DbSet<UserManagement.Models.LogEntry>? LogEntries { get; set; }
+
 
     public IQueryable<TEntity> GetAll<TEntity>() where TEntity : class
         => base.Set<TEntity>();
@@ -52,4 +58,19 @@ public class DataContext : DbContext, IDataContext
         base.Remove(entity);
         SaveChanges();
     }
+
+
+    public void Log(UserManagement.Models.LogEntry entry)
+    {
+        base.Add(entry);
+        SaveChanges();
+    }
+
+    public IQueryable<UserManagement.Models.LogEntry> GetAllLogs()
+    {
+        return LogEntries!.Include(l => l.User);
+    }
+
+
+
 }
