@@ -2,6 +2,11 @@
 using System.Collections.Generic;
 #pragma warning restore IDE0005 // Using directive is unnecessary.
 using System.Linq;
+using System.Threading.Tasks;
+
+using System.Threading;
+
+using Microsoft.EntityFrameworkCore;
 #pragma warning disable IDE0005 // Using directive is unnecessary.
 using Microsoft.Extensions.Logging.Abstractions;
 using UserManagement.Models;
@@ -38,5 +43,9 @@ public interface IDataContext
 
     void Log(UserManagement.Models.LogEntry entry);
     IQueryable<UserManagement.Models.LogEntry> GetAllLogs();
+
+    DbSet<User> Users { get; set; }
+
+    Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
 
 }
