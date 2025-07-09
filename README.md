@@ -151,7 +151,7 @@ Run all tests via:
 ```bash
 dotnet test
 
-- Completed Tasks Summary
+##  Completed Tasks Summary
 Task	Description
 - 1	Setup of MVC app with user CRUD (Standard)
 - 2	Logging with full filters and dashboard (Standard)
@@ -159,7 +159,7 @@ Task	Description
 - 4	Logging user actions and separate dashboard metrics (Advanced)
 - 5	Rebuild using Blazor WebAssembly and Web API (Expert)
 
-- About
+## About
 This project was created as part of a technical evaluation. It demonstrates:
 
 Clean architectural practices
