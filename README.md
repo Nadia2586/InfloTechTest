@@ -63,3 +63,112 @@ Add additional layers to the application that will ensure that it is scaleable w
 
 * Please feel free to change or refactor any code that has been supplied within the solution and think about clean maintainable code and architecture when extending the project.
 * If any additional packages, tools or setup are required to run your completed version, please document these thoroughly.
+
+#####################################################################################################################################
+
+* #### User Test Submission
+* # Inflo User Management Application
+
+This is a full-stack user management system developed for the Inflo technical test. It includes two implementations based on the tasks set out:
+
+1. **Initial version** built with ASP.NET MVC and Razor Pages (Tasks 1-4)
+2. **Expert version** restructured using Blazor WebAssembly and a Web API backend (Task 5)
+
+---
+
+## Technologies Used
+
+- **ASP.NET MVC (Initial Build)**
+- **Blazor WebAssembly + ASP.NET Web API (Expert Build)**
+- Entity Framework Core (In-Memory)
+- Bootstrap, Custom CSS, Google Fonts (Poppins)
+- xUnit (Testing)
+- GitHub for version control
+
+---
+
+## How to Run the Application
+
+### 1. Original Razor Pages Version (MVC-style)
+
+To run the initial implementation:
+
+- Open the solution in Visual Studio
+- Set the **`UserManagement.Web`** project as the startup project
+- Press `F5` to run
+
+**Functionality Available:**
+- User listing
+- Create, edit, delete users
+- View user detail
+- Full action logging with dashboard and filters
+- Unit tests for controllers, services, and logging
+
+---
+
+### 2. Expert-Level Rebuild (Blazor + Web API)
+
+The second part of the project involved a significant architectural change — replacing Razor Pages with a **Blazor WebAssembly frontend** that communicates with a **separate Web API backend**.
+
+To run this version:
+
+- Set both of these projects to start:
+  - `UserManagement.API`
+  - `UserManagement.Blazor`
+- Press `F5` to run the solution
+- The Blazor frontend will launch and connect to the API
+
+**Functionality Available:**
+- Styled in line with Inflo branding
+- Navigation menu with icons and animation
+- Table hover effects and status badges
+- API endpoints tested and verified
+
+---
+
+## Styling and Branding
+
+The application has been styled to reflect **Inflo’s platform branding**:
+
+- Custom logo placement in the sidebar
+- Navigation hover effects with smooth transitions
+- Responsive table and form layouts
+- Colour palette derived from Inflo’s brand site
+- Font: [Poppins](https://fonts.google.com/specimen/Poppins)
+
+---
+
+## Testing
+
+Unit tests have been created for:
+
+- User services
+- User controller logic
+- Logging functionality
+
+Run all tests via:
+
+```bash
+dotnet test
+
+- Completed Tasks Summary
+Task	Description
+- 1	Setup of MVC app with user CRUD (Standard)
+- 2	Logging with full filters and dashboard (Standard)
+- 3	Unit testing across services and controller (Standard)
+- 4	Logging user actions and separate dashboard metrics (Advanced)
+- 5	Rebuild using Blazor WebAssembly and Web API (Expert)
+
+- About
+This project was created as part of a technical evaluation. It demonstrates:
+
+Clean architectural practices
+
+Modern .NET front and back end development
+
+Reusable services, DTOs, and data models
+
+Fully tested and accessible UI
+
+Built by Nadia Chinnery, 2025.
+
