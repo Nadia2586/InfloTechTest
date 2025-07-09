@@ -34,7 +34,7 @@ public class DataContext : DbContext, IDataContext
             new User { Id = 11, Forename = "Robin", Surname = "Feld", DateOfBirth = new DateTime(2002, 6, 25), Email = "rfeld@example.com", IsActive = true },
         });
 
-    public DbSet<User>? Users { get; set; }
+    public DbSet<User> Users { get; set; }
     public DbSet<UserManagement.Models.LogEntry>? LogEntries { get; set; }
 
 

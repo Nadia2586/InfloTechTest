@@ -1,0 +1,58 @@
+﻿@page "/users"
+@inject HttpClient Http
+@using UserManagement.Shared.Dto
+
+<h2 class="page-subtitle">Users</h2>
+
+@if (users == null)
+{
+    <div class="loading">
+        <em>Loading users...</em>
+    </div>
+}
+else
+{
+    <div class="table-container">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Forename</th>
+                    <th>Surname</th>
+                    <th>Email</th>
+                    <th>Date of Birth</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var user in users)
+                {
+                    <tr>
+                        <td>@user.Forename</td>
+                        <td>@user.Surname</td>
+                        <td>@user.Email</td>
+                        <td>@user.DateOfBirth.ToShortDateString()</td>
+                        <td>
+                            @if (user.IsActive)
+                            {
+                                <span class="badge badge-success">Active</span>
+                            }
+                            else
+                            {
+                                <span class="badge badge-secondary">Inactive</span>
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
+
+@code {
+    private List<UserDto>? users;
+
+    protected override async Task OnInitializedAsync()
+    {
+        users = await Http.GetFromJsonAsync<List<UserDto>>("https://localhost:5133/api/users");
+    }
+}
